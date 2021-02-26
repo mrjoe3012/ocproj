@@ -8,7 +8,6 @@ local function init()
     local handle = internet.request(JSON_UTIL_URL)
     local util = ""
     for chunk in handle do util = util..chunk end
-    handle:close()
     JSON = loadstring(util)
 end
 
@@ -18,8 +17,6 @@ local function getPackageList()
     local jsonList = ""
 
     for chunk in handle do jsonList = jsonList..chunk end
-    
-    handle:close()
 
     local tableList = json.decode(jsonList)
 
