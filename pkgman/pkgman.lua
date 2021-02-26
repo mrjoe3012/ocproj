@@ -8,7 +8,7 @@ local function init()
     local handle = internet.request(JSON_UTIL_URL)
     local util = ""
     for chunk in handle do util = util..chunk end
-    JSON = loadstring(util)
+    JSON = load(util)
 end
 
 local function getPackageList()
