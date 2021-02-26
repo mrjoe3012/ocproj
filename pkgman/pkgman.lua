@@ -1,6 +1,6 @@
 local internet = require("internet")
 
-local LIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/list.json"
+local LIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/list.csv"
 
 local function split (inputstr, sep)
     if sep == nil then
