@@ -5,7 +5,7 @@ local LIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/list
 local JSON_UTIL_URL = "https://raw.githubusercontent.com/rxi/json.lua/master/json.lua"
 
 local function init()
-    local handle = internet.open(JSON_UTIL_URL)
+    local handle = internet.request(JSON_UTIL_URL)
     local util = ""
     for chunk in handle do util = util..chunk end
     handle:close()
@@ -14,7 +14,7 @@ end
 
 local function getPackageList()
 
-    local handle = internet.open(LIST_URL)
+    local handle = internet.request(LIST_URL)
     local jsonList = ""
 
     for chunk in handle do jsonList = jsonList..chunk end
