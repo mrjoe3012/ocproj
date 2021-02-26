@@ -35,6 +35,5 @@ local function getPackageList()
 
 end
 
-init()
 pkgList = getPackageList()
 for k,v in next, pkgList do print(k)print(v.name..":"..v.version) end
