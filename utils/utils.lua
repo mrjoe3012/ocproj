@@ -14,7 +14,7 @@ end
 function utils.linearSearch(table, condition)
     local index = nil
     for k,v in next, table do
-        if condition(table, k) then
+        if condition(k) then
             index = k
             break
         end
