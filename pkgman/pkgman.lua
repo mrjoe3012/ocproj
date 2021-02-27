@@ -65,7 +65,22 @@ local function func_install()
 end
 
 local function func_list()
-    --stub
+    local localPkgList = readLocalPackageList()
+    local masterPkgList = readMasterPackageList()
+    if arg[2] == "-local" or "-installed" then
+        print("Installed Packages:")
+        for pkgName,_ in pairs(localPkgList) do
+            print(pkgName)
+        end
+    else if arg[2] ~= nil then
+        print(string.format("Unknown switch '%s'", arg[2]))
+    else
+        print("All Packages")
+        for pkgName,_ in pairs(masterPkgList) do
+            print(pkgName)
+        end
+    end
+
 end
 
 local commands = {
