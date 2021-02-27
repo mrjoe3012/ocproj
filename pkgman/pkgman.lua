@@ -20,8 +20,8 @@ end
 
 local function readLocalPackageList()
     local file = io.open(PKGLIST_PATH, "r")
-    local lines = io.read(file, "*a")
-    io.close(file)
+    local lines = file:read("*a")
+    file:close()
     local packageList = json.decode(lines)
     return packageList
 end
