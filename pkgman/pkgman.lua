@@ -5,6 +5,8 @@ local PKGLIST_PATH = "/etc/pkglist"
 local MASTER_PKGLIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/pkglist"
 local GITHUB_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/"
 
+local arg = {...}
+
 local function strsplit (inputstr, sep)
     if sep == nil then
             sep = "%s"
