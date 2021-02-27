@@ -1,1 +1,0 @@
-os.execute(string.format("wget -f %s %s", "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/kieran/kieran.lua", "/bin/kieran.lua"))
