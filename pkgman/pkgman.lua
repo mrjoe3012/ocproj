@@ -18,7 +18,7 @@ local function strsplit (inputstr, sep)
     return t
 end
 
-local function readLocalPacakgeList()
+local function readLocalPackageList()
     local file = io.open(PKGLIST_PATH, "r")
     local lines = io.read(file, "*a")
     io.close(file)
@@ -46,13 +46,13 @@ local function readMasterPackageList()
 end
 
 local function func_install()
-    local programName = arg[3]
+    local programName = arg[2]
     local localPkgList = readLocalPackageList()
     local masterPkgList = readMasterPackageList()
     if programName == nil then
         print("Usage: install program_name")
     elseif masterPkgList[programName] then
-        print(string.format("'%s' is not a program.", arg[3]))
+        print(string.format("'%s' is not a program.", arg[2]))
     else
         local installScript = ""
         local data = internet.request(GITHUB_URL..programName.."/install.lua")
@@ -70,8 +70,8 @@ local commands = {
     list=func_list
 }
 
-if commands[arg[2]] == nil then
-    print(string.format("'%s' is not a recognised command.", arg[2]))
+if commands[arg[1]] == nil then
+    print(string.format("'%s' is not a recognised command.", arg[1]))
 else
-    commands[arg[2]]()
+    commands[arg[1]]()
 end
