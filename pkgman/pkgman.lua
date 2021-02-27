@@ -52,7 +52,7 @@ local function func_install()
     local masterPkgList = readMasterPackageList()
     if programName == nil then
         print("Usage: install program_name")
-    elseif not masterPkgList[programName] then
+    elseif masterPkgList[programName] == nil then
         print(string.format("'%s' is not a program.", arg[2]))
     else
         local installScript = ""
