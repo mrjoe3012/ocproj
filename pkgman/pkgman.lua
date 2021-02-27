@@ -72,7 +72,7 @@ local function func_list()
         for pkgName,_ in pairs(localPkgList) do
             print(pkgName)
         end
-    else if arg[2] ~= nil then
+    elseif arg[2] ~= nil then
         print(string.format("Unknown switch '%s'", arg[2]))
     else
         print("All Packages")
