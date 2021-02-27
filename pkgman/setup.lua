@@ -21,7 +21,7 @@ load(pkgInstallScript)
 local json = require("json")
 
 local pkgListNew = {["pkgman"]=true, ["json"]=true}
-local pkgListJson = json.encode_table(pkgListNew)
+local pkgListJson = json.encode(pkgListNew)
 
 file = io.open(PKGLIST_DIR, "w")
 io.output(file)
