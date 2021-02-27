@@ -15,7 +15,7 @@ end
 local jsonInstallScript = getFile(JSON_INSTALL_URL)
 load(jsonInstallScript)
 
-local pkgInstallScript = getFile(PKGMAN_INSTALL_URK)
+local pkgInstallScript = getFile(PKGMAN_INSTALL_URL)
 load(pkgInstallScript)
 
 local json = require("json")
