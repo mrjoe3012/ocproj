@@ -67,7 +67,7 @@ end
 local function func_list()
     local localPkgList = readLocalPackageList()
     local masterPkgList = readMasterPackageList()
-    if arg[2] == "-local" or "-installed" then
+    if arg[2] == "-local" or arg[2] == "-installed" then
         print("Installed Packages:")
         for pkgName,_ in pairs(localPkgList) do
             print(pkgName)
