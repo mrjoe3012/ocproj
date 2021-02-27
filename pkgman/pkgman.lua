@@ -19,8 +19,7 @@ local function strsplit (inputstr, sep)
 end
 
 local function readLocalPackageList()
-    local file = io.open(PKGLIST_PATH, "r")
-    io.input(file)
+    io.input(PKGLIST_PATH)
     local lines = io.read("*all")
     io.close(file)
     local packageList = json.decode(lines)
