@@ -59,6 +59,8 @@ local function func_install()
         local data = internet.request(GITHUB_URL..programName.."/install.lua")
         for chunk in data do installScript = installScript..chunk end
         load(installScript)()
+        localPkgList[programName] = true
+        writeLocalPackageList(localPkgList)
     end
 end
 
