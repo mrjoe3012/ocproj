@@ -1,6 +1,6 @@
 local service = {}
 
-local function service.initServiceDaemon()
+local function initServiceDaemon()
 
     assert(not service.daemon, "Cannot reinitialize service daemon.")
 
@@ -8,14 +8,14 @@ local function service.initServiceDaemon()
 
 end
 
-local function service.getServiceDaemon()
+local function getServiceDaemon()
 
-    if not service.daemon then service.initServiceDaemon() end
+    if not service.daemon then initServiceDaemon() end
 
     return service.daemon
 
 end
 
-print(service.getServiceDaemon())
+print(getServiceDaemon())
 
 return service
