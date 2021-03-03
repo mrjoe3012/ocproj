@@ -6,7 +6,7 @@ local serverexec = {port, init=false}
 
 function serverexec.start(port)
     assert(not serverexec.init, "serverexec is already initialized")
-    assert(type(port)=="string", string.format("invalid argument #1 expected string got %s", type(port)))
+    assert(type(port)=="number", string.format("invalid argument #1 expected number got %s", type(port)))
     assert(not modem.isOpen(port), string.format("port '%s' is already open.", tostring(port)))
     serverexec.init = true
     serverexec.port = port
