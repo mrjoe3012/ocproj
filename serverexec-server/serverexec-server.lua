@@ -21,7 +21,6 @@ end
 function serverexec.start()
     serverexec.port = tonumber(argv[0]) or DEFAULT_PORT
     modem.open(serverexec.port)
-    event.listen("modem_message", serverexec.onModemEvent)
     serverexec.stop = false
     listen()
 end
