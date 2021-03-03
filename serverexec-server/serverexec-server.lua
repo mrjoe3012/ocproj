@@ -20,8 +20,7 @@ local function listen()
 end
 
 function serverexec.start()
-    serverexec.port = tonumber(argv["serverexecserver_port"]) or DEFAULT_PORT
-    modem.open(serverexec.port)
+    modem.open(DEFAULT_PORT)
     serverexec.stop = false
     listen()
 end
@@ -29,7 +28,7 @@ end
 function serverexec.stop()
     serverexec.workerThread:kill()
     serverexec.workerThread = nil
-    require("component").modem.close(serverexec.port)
+    modem.close(DEFAULT_PORT)
 end
 
 start = function() serverexec.workerThread = thread.create(serverexec.start) serverexec.workerThread:detach() end
