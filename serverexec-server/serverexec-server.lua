@@ -14,7 +14,9 @@ local argv = args
 local function listen()
     while true do
         local signalName, localAddress, remoteAddress, port, distance, execString, responsePort = event.pull("modem_message")
-        local response = serialization.serialize(table.pack(pcall(load(execString))))
+        local func, err = load(execString)
+        if func == nil then func = function() error(err) end end
+        local response = serialization.serialize(table.pack(pcall(func)))
         modem.send(remoteAddress, responsePort, response)
     end
 end
