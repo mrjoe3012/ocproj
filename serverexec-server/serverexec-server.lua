@@ -4,6 +4,7 @@ local event = require("event")
 local json = require("json")
 local internet = require("internet")
 local serialization = require("serialization")
+local thread = require("thread")
 
 local serverexec = {workerThread}
 
@@ -12,11 +13,9 @@ local argv = {...}
 
 local function listen()
     while true do
-        --localAddress, remoteAddress, port, distance, execString, responsePort = event.pull("modem_message")
-        --local response = serialization.serialize(table.pack(pcall(load(execString))))
-        --modem.send(remoteAddress, responsePort, response)
-        local args = table.pack(event.pull("modem_message"))
-        for _,v in next, args do print(v) end
+        local signalName, localAddress, remoteAddress, port, distance, execString, responsePort = event.pull("modem_message")
+        local response = serialization.serialize(table.pack(pcall(load(execString))))
+        modem.send(remoteAddress, responsePort, response)
     end
 end
 
