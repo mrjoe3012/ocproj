@@ -5,16 +5,18 @@ local json = require("json")
 local internet = require("internet")
 local serialization = require("serialization")
 
-local serverexec = {stop=false}
+local serverexec = {workerThread}
 
 local DEFAULT_PORT = 1000
 local argv = {...}
 
 local function listen()
-    while serverexec.stop == false do
-        localAddress, remoteAddress, port, distance, execString, responsePort = event.pull("modem_message")
-        local response = serialization.serialize(table.pack(pcall(load(execString))))
-        modem.send(remoteAddress, responsePort, response)
+    while true do
+        --localAddress, remoteAddress, port, distance, execString, responsePort = event.pull("modem_message")
+        --local response = serialization.serialize(table.pack(pcall(load(execString))))
+        --modem.send(remoteAddress, responsePort, response)
+        local args = table.pack(event.pull("modem_message"))
+        for _,v in next, args do print(v) end
     end
 end
 
@@ -26,11 +28,12 @@ function serverexec.start()
 end
 
 function serverexec.stop()
-    serverexec.stop = true
+    serverexec.workerThread:kill()
+    serverexec.workerThread = nil
     modem.close(serverexec.port)
 end
 
-start = serverexec.start
+start = function() serverexec.workerThread = thread.create(serverexec.start) end
 stop = serverexec.stop
 
 return serverexec
