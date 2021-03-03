@@ -32,7 +32,7 @@ function serverexec.stop()
     modem.close(serverexec.port)
 end
 
-start = function() serverexec.workerThread = thread.create(serverexec.start) end
+start = function() serverexec.workerThread = thread.create(serverexec.start) serverexec.workerThread:detatch() end
 stop = serverexec.stop
 
 return serverexec
