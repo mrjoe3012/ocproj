@@ -9,7 +9,7 @@ local thread = require("thread")
 local serverexec = {workerThread}
 
 local DEFAULT_PORT = 1000
-local argv = {...}
+local argv = args
 
 local function listen()
     while true do
@@ -20,7 +20,7 @@ local function listen()
 end
 
 function serverexec.start()
-    serverexec.port = tonumber(argv[0]) or DEFAULT_PORT
+    serverexec.port = tonumber(argv["serverexec-server_port"]) or DEFAULT_PORT
     modem.open(serverexec.port)
     serverexec.stop = false
     listen()

@@ -1,4 +1,5 @@
 local exec = os.execute
+local internet = require("internet")
 
 local SERVEREXEC_LUA_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/serverexec-server/serverexec-server.lua"
 local SERVEREXEC_INSTALL_DIR = "/etc/rc.d/serverexec-server.lua"
