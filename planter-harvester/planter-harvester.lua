@@ -7,18 +7,18 @@ local position = {x=242,y=72,z=-223}
 function position.__tostring(self)
     return string.format("{%d,%d,%d}", self.x, self.y, self.z)
 end
-
+setmetatable(position, position)
 -- can only be facing one direction at a time
 local facing = {x=1,z=0}
 
 function facing.__tostring(self)
     return string.format("{%d,%d}", self.x, self.z)
 end
-
+setmetatable(facing, facing)
 local debugFile = nil
 local DEBUG_MODE = true
 
-local function openFileDebugFile()
+local function openDebugFile()
     if debugFile then return end
 
     debugFile = io.open("/home/debug.txt", "r")
@@ -30,11 +30,13 @@ local function openFileDebugFile()
     end
 end
 
+if DEBUG_MODE then openDebugFile() end
+
 local function writeDebug(message)
-    if not debugFile then openDebugFile() end
     if not DEBUG_MODE then return end
     debugFile:write(message)
     debugFile:write("\n")
+    debugFile:flush()
 end
 
 local _forward = robot.forward
@@ -142,14 +144,14 @@ robot.turnAround = function()
 end
 
 local FARM_DEPTH = 16
-local FARM_WIDTH = 15
+local FARM_WIDTH = 4--15
 local SEED_NAME = "minecraft:wheat_seeds"
 
 local inventorySize = robot.inventorySize()
 
 local function equipItemWithName(name)
 
-    local found = false, slot = nil
+    local found, slot = false, nil
 
     for i=1,inventorySize,1 do
         local slotData = inventoryController.getStackInInternalSlot(i) or {}
@@ -169,7 +171,7 @@ local equipSeeds = function() equipItemWithName(SEED_NAME) end
 
 local function harvestAndPlant()
 
-    writeDebug(string.format("Beginning to harvest and plant a farm of depth: %d and width: %d.", FARM_DEPTH, DARM_WIDTH))
+    writeDebug(string.format("Beginning to harvest and plant a farm of depth: %d and width: %d.", FARM_DEPTH, FARM_WIDTH))
 
     local startPos = {x=position.x, z=position.z}
     local startFacing = {x=facing.x, z=facing.z}
@@ -203,14 +205,16 @@ local function harvestAndPlant()
 
         end
         writeDebug(string.format("Finishing column %d. Respositioning.", i))
-        if i%2 == 1 then
-            repeat until robot.turnRight()
-            repeat until robot.forward()
-            repeat until robot.turnRight()
-        else
-            repeat until robot.turnLeft()
-            repeat until robot.forward()
-            repeat until robot.turnLeft()
+        if i ~= FARM_WIDTH then
+            if i%2 == 1 then
+                repeat until robot.turnRight()
+                repeat until robot.forward()
+                repeat until robot.turnRight()
+            else
+                repeat until robot.turnLeft()
+                repeat until robot.forward()
+                repeat until robot.turnLeft()
+            end
         end
     end
 
@@ -232,7 +236,7 @@ local function harvestAndPlant()
         repeat until robot.forward()
     end
 
-    writeDebug(string.format("Returning to initial rotation. Facing: x: %d z: %d", startFacing.x, startFacing.z)
+    writeDebug(string.format("Returning to initial rotation. Facing: x: %d z: %d", startFacing.x, startFacing.z))
 
     while facing.x ~= startFacing.x and facing.z ~= startFacing.z do robot.turnRight() end
     
