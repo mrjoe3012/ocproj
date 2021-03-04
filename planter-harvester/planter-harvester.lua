@@ -1,5 +1,6 @@
 local robot = require("robot")
 local component = require("component")
+local computer_api = require("computer")
 local inventoryController = component.inventory_controller
 
 local position = {x=242,y=72,z=-223}
@@ -147,6 +148,79 @@ local FARM_DEPTH = 16
 local FARM_WIDTH = 4--15
 local SEED_NAME = "minecraft:wheat_seeds"
 
+local FARM_TO_CHARGER = {
+    [1]={x=242,y=72,z=-223},
+    [2]={x=242,y=74,z=-223},
+    [3]={x=242,y=74,z=-232},
+    [4]={x=232,y=74,z=-232},
+    [5]={x=232,y=72,z=-232},
+    [6]={x=232,y=72,z=-259},
+    [7]={x=232,y=75,z=-259},
+    [8]={x=256,y=75,z=-259},
+    [9]={x=256,y=75,z=-261},
+    [10]={x=255,y=75,z=-261},
+}
+
+local function lookAt(f)
+    assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
+    while facing.x ~= f.x and facing.z ~= f.z do robot.turnRight() end
+end
+
+local function moveTo(p)
+
+    assert(type(p) == "table" and p.x and p.y and p.z, string.format("Invalid argument #1. Expected position table got %s", type(p)))
+
+    local deltaX, deltaZ, deltaY = p.x-position.x, p.z-position.z, p.y-position.y
+
+    writeDebug(string.format("Moving to {%d,%d,%d}. deltaX: %d deltaZ: %d", p.x, p.y, p.z, deltaX, deltaZ))
+
+    if deltaX ~= 0 then
+        lookAt({z=0,x=math.floor(deltaX/math.abs(deltaX))})
+
+        for i=1,math.abs(deltaX),1 do
+            repeat until robot.forward()
+        end
+
+    end
+
+    if deltaZ ~= 0 then
+
+        lookAt({z=math.floor(deltaZ/math.abs(deltaZ)),x=0})
+
+        for i=1,math.abs(deltaZ),1 do
+            repeat until robot.forward()
+        end
+
+    end
+
+    if deltaY ~= 0 then
+        if deltaY > 0 then
+            for i=1,math.abs(deltaY),1 do
+                repeat until robot.up()
+            end
+        else
+            for i=1,math.abs(deltaY),1 do
+                repeat until robot.down()
+            end
+        end
+    end
+
+end
+
+local function doWaypoints(waypoints, startIndex, stopIndex, increment)
+
+    local startIndex = startIndex or 1
+    local stopIndex = stopIndex or #waypoints
+    local increment = increment or 1
+
+    --add a good debug log
+
+    for i=startIndex,stopIndex,increment do
+        moveTo(waypoints[i])
+    end
+
+end
+
 local inventorySize = robot.inventorySize()
 
 local function equipItemWithName(name)
@@ -244,4 +318,36 @@ local function harvestAndPlant()
 
 end
 
-harvestAndPlant()
+local function goToChargerFromFarm()
+
+    writeDebug("Going to charger from farm.")
+
+    doWaypoints(FARM_TO_CHARGER)
+
+    writeDebug("Arrived at charger.")
+
+end
+
+local function chargeUp()
+    writeDebug("Waiting for charge. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
+
+    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) do os.sleep(1) end
+    os.sleep(1)
+
+    writeDebug("Finished charging. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
+end
+
+local function goToFarmFromCharger()
+
+    writeDebug("Going to farm from charger.")
+
+    doWaypoints(FARM_TO_CHARGER, #FARM_TO_CHARGER, 1, -1)
+
+    writeDebug("Arrived at farm.")
+
+end
+
+--harvestAndPlant()
+goToChargerFromFarm()
+chargeUp()
+goToFarmFromCharger()
