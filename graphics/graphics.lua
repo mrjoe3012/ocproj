@@ -8,7 +8,7 @@ end
 
 function graphics.clear()
     local resX, resY = gpu.getResolution()
-    gpu.fillRectangle(1,1,resX,resY,0)
+    graphics.fillRectangle(1,1,resX,resY,0)
 end
 
 function graphics.write(startX,startY,foregroundColourHex, backgroundColourHex, text)
@@ -17,4 +17,4 @@ function graphics.write(startX,startY,foregroundColourHex, backgroundColourHex, 
     gpu.set(startX, startY, text)
 end
 
-return graphcis
+return graphics
