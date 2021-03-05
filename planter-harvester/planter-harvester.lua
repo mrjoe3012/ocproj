@@ -184,10 +184,10 @@ local FARM_TO_CHARGER = readWaypointFile("/home/farmtocharger.wp")
 local function lookAt(f)
 
     local function getAngle(x,z)
-        if fa.x == 1 then  return 0 end
-        if fa.z == 1 then return 90 end
-        if fa.x == -1 then  return 180 end
-        if fa.z == -1 then return 270 end
+        if x == 1 then  return 0 end
+        if z == 1 then return 90 end
+        if x == -1 then  return 180 end
+        if z == -1 then return 270 end
     end 
 
     local facingDelta = getAngle(f.x,f.z)-getAngle(facing.x,facing.z)
