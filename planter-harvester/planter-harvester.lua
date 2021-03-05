@@ -5,6 +5,7 @@ local inventoryController = component.inventory_controller
 local utils = require("utils")
 local json = require("json")
 local modem = component.modem
+local thread = require("thread")
 
 local position = {x=242,y=72,z=-223}
 
@@ -421,7 +422,7 @@ end)
 while true do
     --harvestAndPlant()
     --local startFacing = {x=facing.x, z=facing.z}
-    --goToChargerFromFarm()
+    goToChargerFromFarm()
     chargeUpAndDeposit()
     goToFarmFromCharger()
     lookAt(startFacing)
