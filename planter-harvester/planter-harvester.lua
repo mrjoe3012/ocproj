@@ -2,6 +2,7 @@ local robot = require("robot")
 local component = require("component")
 local computer_api = require("computer")
 local inventoryController = component.inventory_controller
+local utils = require("utils")
 
 local position = {x=242,y=72,z=-223}
 
@@ -161,9 +162,28 @@ local FARM_TO_CHARGER = {
     [10]={x=255,y=75,z=-261},
 }
 
+local function readWaypointFile(filename)
+
+    assert(type(filename)=="string", string.format("Invalid argument #1. string expected got %s", type(filename)))
+
+    local file = io.open(filename,"r")
+    assert(file, "Unable to read waypoints from '%s'", filename)
+    local waypointDataRaw = file:read("*all")
+    file:close()
+
+    local waypointStringArray = utils.stringSplit(waypointDataRaw,"\n")
+    local waypointArray = {}
+
+    for i,waypointString in ipairs(waypointString) do
+        local arr = utils.stringSplit
+    end
+
+end
+
 local function lookAt(f)
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
-    while facing.x ~= f.x and facing.z ~= f.z do robot.turnRight() end
+    writeDebug(string.format("Turning to face x: %d z: %d", f.x, f.z))
+    while facing.x ~= f.x or facing.z ~= f.z do robot.turnRight() end
 end
 
 local function moveTo(p)
@@ -312,7 +332,7 @@ local function harvestAndPlant()
 
     writeDebug(string.format("Returning to initial rotation. Facing: x: %d z: %d", startFacing.x, startFacing.z))
 
-    while facing.x ~= startFacing.x and facing.z ~= startFacing.z do robot.turnRight() end
+    while facing.x ~= startFacing.x or facing.z ~= startFacing.z do robot.turnRight() end
     
     writeDebug("Finished planting and harvesting.")
 
@@ -347,7 +367,9 @@ local function goToFarmFromCharger()
 
 end
 
---harvestAndPlant()
+harvestAndPlant()
+local startFacing = facing
 goToChargerFromFarm()
 chargeUp()
 goToFarmFromCharger()
+lookAt(startFacing)

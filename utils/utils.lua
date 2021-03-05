@@ -22,4 +22,9 @@ function utils.linearSearch(table, condition)
     return index
 end
 
+function utils.sign(number)
+    assert(type(number)=="number",string.format("Invalid argument #1. Number expected got %s", type(number)))
+    return math.floor(math.abs(number)/number)
+end
+
 return utils
