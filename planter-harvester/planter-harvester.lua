@@ -7,33 +7,45 @@ local json = require("json")
 local modem = component.modem
 local thread = require("thread")
 
-local position = {x=242,y=72,z=-223}
+local position = {x=0,y=0,z=0}
 
-local state = {}
+local state = {name=robot.name()}
 
 function position.__tostring(self)
     return string.format("{%d,%d,%d}", self.x, self.y, self.z)
 end
 setmetatable(position, position)
 -- can only be facing one direction at a time
-local facing = {x=1,z=0}
+local facing = {x=0,z=0}
 
 function facing.__tostring(self)
     return string.format("{%d,%d}", self.x, self.z)
 end
 setmetatable(facing, facing)
+
+local configFile = io.open("/etc/planter-harvester.cfg", "r")
+assert(configFile, "Unable to open config file.")
+local config = load(configFile:read("*all"))()
+configFile:close()
+
+local DEBUG_MODE, DEBUG_FILE_PATH = config.DEBUG_MODE, config.DEBUG_FILE_PATH
+position.x, position.y, position.z = config.START_POSITION.x, config.START_POSITION.y, config.START_POSITION.z
+facing.x, facing.z = config.START_FACING.x, config.START_FACING.z
+local SERVER_ADDRESS, SERVER_PORT = config.SERVER_ADDRESS, config.SERVER_PORT
+local SEED_NAME = config.SEED_NAME
+local CROP_WAIT_TIME = config.CROP_WAIT_TIME
+
 local debugFile = nil
-local DEBUG_MODE = true
 
 local function openDebugFile()
     if debugFile then return end
 
-    debugFile = io.open("/home/debug.txt", "r")
+    debugFile = io.open(DEBUG_FILE_PATH, "r")
     if debugFile ~= nil then
         debugFile:close()
-        debugFile = io.open("/home/debug.txt", "a")
+        debugFile = io.open(DEBUG_FILE_PATH, "a")
     else
-        debugFile = io.open("/home/debug.txt", "w")
+        debugFile = io.open(DEBUG_FILE_PATH, "w")
     end
 end
 
@@ -150,10 +162,6 @@ robot.turnAround = function()
     return false
 end
 
-local FARM_DEPTH = 16
-local FARM_WIDTH = 15
-local SEED_NAME = "minecraft:wheat_seeds"
-local SERVER_ADDRESS, SERVER_PORT
 local STATE_UPDATE_TICK = 2
 
 local function readWaypointFile(filename)
@@ -179,7 +187,7 @@ local function readWaypointFile(filename)
 
 end
 
-local FARM_TO_CHARGER = readWaypointFile("/home/farmtocharger.wp")
+local FARM_TO_CHARGER = readWaypointFile(config.FARM_TO_CHARGER_WAYPOINTS)
 
 local function lookAt(f)
 
@@ -192,8 +200,8 @@ local function lookAt(f)
 
     local facingDelta = getAngle(f.x,f.z)-getAngle(facing.x,facing.z)
     -- this doesn't make sense. it's okay because we only use facingDelta for its sign...
-    if facingDelta > 180 then facingDelta = -facingDelta end
-    if facingDelta < -180 then facingDelta = -facingDelta
+    if facingDelta > 180 then facingDelta = -facingDelta
+    elseif facingDelta < -180 then facingDelta = -facingDelta end
     local turnFunc = (facingDelta > 0) and robot.turnRight or robot.turnLeft
 
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
@@ -409,7 +417,16 @@ local function waitForCrops()
     state.status = "WAITING FOR CROPS"
     state.progress = 0
 
-    error("not implemented")
+    local counter = 0
+
+    while counter < CROP_WAIT_TIME do
+        os.sleep(1)
+        counter = counter + 1
+        state.progress = (100/CROP_WAIT_TIME)*counter
+    end
+
+    state.status = nil
+    state.progress = nil
 
 end
 
@@ -422,11 +439,11 @@ local statusThread = thread.create(function()
 end)
 
 while true do
-    --harvestAndPlant()
-    --local startFacing = {x=facing.x, z=facing.z}
+    harvestAndPlant()
+    local startFacing = {x=facing.x, z=facing.z}
     goToChargerFromFarm()
     chargeUpAndDeposit()
     goToFarmFromCharger()
     lookAt(startFacing)
-    --waitForCrops()
+    waitForCrops()
 end
