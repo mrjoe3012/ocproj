@@ -28,8 +28,8 @@ function utils.sign(number)
 end
 
 function utils.bubbleSort(list, condition)
-    for i=1,#list-1,1 do
-        for j=1,#list-1-i do
+    for i=1,#list,1 do
+        for j=1,#list-i do
             if not condition(list[j],list[j+1]) then
                 local temp = list[j]
                 list[j] = list[j+1]
