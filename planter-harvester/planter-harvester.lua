@@ -195,7 +195,7 @@ local function lookAt(f)
 
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
     writeDebug(string.format("Turning to face x: %d z: %d", f.x, f.z))
-    while facing.x ~= f.x or facing.z ~= f.z do turnFunc end
+    while facing.x ~= f.x or facing.z ~= f.z do turnFunc() end
 end
 
 local function moveTo(p)
@@ -419,11 +419,11 @@ local statusThread = thread.create(function()
 end)
 
 while true do
-    harvestAndPlant()
-    local startFacing = {x=facing.x, z=facing.z}
-    goToChargerFromFarm()
+    --harvestAndPlant()
+    --local startFacing = {x=facing.x, z=facing.z}
+    --goToChargerFromFarm()
     chargeUpAndDeposit()
     goToFarmFromCharger()
     lookAt(startFacing)
-    waitForCrops()
+    --waitForCrops()
 end
