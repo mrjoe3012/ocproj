@@ -27,7 +27,7 @@ function utils.sign(number)
     return math.floor(math.abs(number)/number)
 end
 
-function utils.bubbleSort(list, condition):
+function utils.bubbleSort(list, condition)
     for i=1,#list-1,1 do
         for j=1,#list-1-i do
             if not condition(list[j],list[j+1]) then
