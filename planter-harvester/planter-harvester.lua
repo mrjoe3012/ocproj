@@ -3,8 +3,12 @@ local component = require("component")
 local computer_api = require("computer")
 local inventoryController = component.inventory_controller
 local utils = require("utils")
+local json = require("json")
+local modem = component.modem
 
 local position = {x=242,y=72,z=-223}
+
+local state = {}
 
 function position.__tostring(self)
     return string.format("{%d,%d,%d}", self.x, self.y, self.z)
@@ -148,6 +152,7 @@ end
 local FARM_DEPTH = 16
 local FARM_WIDTH = 4--15
 local SEED_NAME = "minecraft:wheat_seeds"
+local SERVER_ADDRESS, SERVER_PORT = "", 0
 
 local function readWaypointFile(filename)
 
@@ -261,6 +266,9 @@ local function harvestAndPlant()
 
     writeDebug(string.format("Beginning to harvest and plant a farm of depth: %d and width: %d.", FARM_DEPTH, FARM_WIDTH))
 
+    state.status = "FARMING"
+    state.progress = 0.0
+
     local startPos = {x=position.x, z=position.z}
     local startFacing = {x=facing.x, z=facing.z}
 
@@ -272,7 +280,7 @@ local function harvestAndPlant()
     repeat until robot.forward()
 
     writeDebug(string.format("Commencing harvest-plant loop."))
-
+    local counter = 1
     for i=1,FARM_WIDTH,1 do
         writeDebug(string.format("Beginning column %d", i))
         for j=1,FARM_DEPTH,1 do
@@ -290,7 +298,8 @@ local function harvestAndPlant()
             if j ~= FARM_DEPTH then
                 repeat until robot.forward()
             end
-
+            counter = counter + 1
+            state.progress = (100/(FARM_WIDTH*FARM_DEPTH))*counter
         end
         writeDebug(string.format("Finishing column %d. Respositioning.", i))
         if i ~= FARM_WIDTH then
@@ -330,9 +339,14 @@ local function harvestAndPlant()
     
     writeDebug("Finished planting and harvesting.")
 
+    state.status = nil
+    state.progress = nil
+
 end
 
 local function goToChargerFromFarm()
+
+    state.status = "GOING TO CHARGER"
 
     writeDebug("Going to charger from farm.")
 
@@ -340,10 +354,14 @@ local function goToChargerFromFarm()
 
     writeDebug("Arrived at charger.")
 
+    state.status = nil
+
 end
 
-local function chargeUp()
+local function chargeUpAndDeposit()
     writeDebug("Waiting for charge. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
+
+    state.status = "CHARGING AND DEPOSITING"
 
     local function inventoryEmpty()
         for i=1,inventorySize,1 do
@@ -360,6 +378,8 @@ end
 
 local function goToFarmFromCharger()
 
+    state.status = "GOING TO FARM"
+
     writeDebug("Going to farm from charger.")
 
     doWaypoints(FARM_TO_CHARGER, #FARM_TO_CHARGER, 1, -1)
@@ -368,9 +388,31 @@ local function goToFarmFromCharger()
 
 end
 
---harvestAndPlant()
-local startFacing = facing
-goToChargerFromFarm()
-chargeUpAndDeposit()
-goToFarmFromCharger()
-lookAt(startFacing)
+local function waitForCrops()
+
+    state.status = "WAITING FOR CROPS"
+    state.progress = 0
+
+    error("not implemented")
+
+end
+
+local statusThread = thread.create(function()
+   
+    while true do
+        os.sleep(2)
+        local jsonStatus = json.encode(state)
+        modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
+    end
+
+end)
+
+while true do
+    harvestAndPlant()
+    local startFacing = {x=facing.x, z=facing.z}
+    goToChargerFromFarm()
+    chargeUpAndDeposit()
+    goToFarmFromCharger()
+    lookAt(startFacing)
+    waitForCrops()
+end
