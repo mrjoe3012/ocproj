@@ -161,7 +161,7 @@ local function readWaypointFile(filename)
     local waypointStringArray = utils.stringSplit(waypointDataRaw,"\n")
     local waypointArray = {}
 
-    for i,waypointString in ipairs(waypointString) do
+    for i,waypointString in ipairs(waypointStringArray) do
         local arr = utils.stringSplit(waypointString, ",")
         local waypoint = {}
         waypoint.x, waypoint.y, waypoint.z = tonumber(arr[1]), tonumber(arr[2]), tonumber(arr[3])
