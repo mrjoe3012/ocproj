@@ -191,7 +191,9 @@ local function lookAt(f)
     end 
 
     local facingDelta = getAngle(f.x,f.z)-getAngle(facing.x,facing.z)
-
+    -- this doesn't make sense. it's okay because we only use facingDelta for its sign...
+    if facingDelta > 180 then facingDelta = -facingDelta end
+    if facingDelta < -180 then facingDelta = -facingDelta
     local turnFunc = (facingDelta > 0) and robot.turnRight or robot.turnLeft
 
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
