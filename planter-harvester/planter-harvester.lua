@@ -345,7 +345,14 @@ end
 local function chargeUp()
     writeDebug("Waiting for charge. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
 
-    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) do os.sleep(1) end
+    local function inventoryEmpty()
+        for i=1,inventorySize,1 do
+            if robot.count(i) > 0 then return false end
+        end
+        return true
+    end
+
+    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) or not inventoryEmpty() do os.sleep(1) end
     os.sleep(1)
 
     writeDebug("Finished charging. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
@@ -361,9 +368,9 @@ local function goToFarmFromCharger()
 
 end
 
-harvestAndPlant()
+--harvestAndPlant()
 local startFacing = facing
 goToChargerFromFarm()
-chargeUp()
+chargeUpAndDeposit()
 goToFarmFromCharger()
 lookAt(startFacing)
