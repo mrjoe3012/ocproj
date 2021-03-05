@@ -2,7 +2,7 @@ local internet = require("internet")
 local json = require("json")
 
 local PKGLIST_PATH = "/etc/pkglist"
-local MASTER_PKGLIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/pkglist"
+local MASTER_PKGLIST_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/pkglist?flush_cache=True"
 local GITHUB_URL = "https://raw.githubusercontent.com/mrjoe3012/ocproj/master/"
 
 local arg = {...}
