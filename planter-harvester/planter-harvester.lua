@@ -149,19 +149,6 @@ local FARM_DEPTH = 16
 local FARM_WIDTH = 4--15
 local SEED_NAME = "minecraft:wheat_seeds"
 
-local FARM_TO_CHARGER = {
-    [1]={x=242,y=72,z=-223},
-    [2]={x=242,y=74,z=-223},
-    [3]={x=242,y=74,z=-232},
-    [4]={x=232,y=74,z=-232},
-    [5]={x=232,y=72,z=-232},
-    [6]={x=232,y=72,z=-259},
-    [7]={x=232,y=75,z=-259},
-    [8]={x=256,y=75,z=-259},
-    [9]={x=256,y=75,z=-261},
-    [10]={x=255,y=75,z=-261},
-}
-
 local function readWaypointFile(filename)
 
     assert(type(filename)=="string", string.format("Invalid argument #1. string expected got %s", type(filename)))
@@ -175,10 +162,17 @@ local function readWaypointFile(filename)
     local waypointArray = {}
 
     for i,waypointString in ipairs(waypointString) do
-        local arr = utils.stringSplit
+        local arr = utils.stringSplit(waypointString, ",")
+        local waypoint = {}
+        waypoint.x, waypoint.y, waypoint.z = tonumber(arr[1]), tonumber(arr[2]), tonumber(arr[3])
+        table.insert(waypointArray, waypoint)
     end
 
+    return waypointArray
+
 end
+
+local FARM_TO_CHARGER = readWaypointFile("/home/farmtocharger.wp")
 
 local function lookAt(f)
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
