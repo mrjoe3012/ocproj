@@ -150,9 +150,10 @@ robot.turnAround = function()
 end
 
 local FARM_DEPTH = 16
-local FARM_WIDTH = 4--15
+local FARM_WIDTH = 15
 local SEED_NAME = "minecraft:wheat_seeds"
-local SERVER_ADDRESS, SERVER_PORT = "", 0
+local SERVER_ADDRESS, SERVER_PORT
+local STATE_UPDATE_TICK = 2
 
 local function readWaypointFile(filename)
 
@@ -180,9 +181,21 @@ end
 local FARM_TO_CHARGER = readWaypointFile("/home/farmtocharger.wp")
 
 local function lookAt(f)
+
+    local function getAngle(x,z)
+        if fa.x == 1 then  return 0 end
+        if fa.z == 1 then return 90 end
+        if fa.x == -1 then  return 180 end
+        if fa.z == -1 then return 270 end
+    end 
+
+    local facingDelta = getAngle(f.x,f.z)-getAngle(facing.x,facing.z)
+
+    local turnFunc = (facingDelta > 0) and robot.turnRight or robot.turnLeft
+
     assert(type(f) == "table" and f.x and f.z, string.format("Invalid argument #1. Expected facing table got %s", type(f)))
     writeDebug(string.format("Turning to face x: %d z: %d", f.x, f.z))
-    while facing.x ~= f.x or facing.z ~= f.z do robot.turnRight() end
+    while facing.x ~= f.x or facing.z ~= f.z do turnFunc end
 end
 
 local function moveTo(p)
@@ -398,13 +411,11 @@ local function waitForCrops()
 end
 
 local statusThread = thread.create(function()
-   
-    while true do
-        os.sleep(2)
+    while SERVER_ADDRESS and SERVER_PORT do
+        os.sleep(STATE_UPDATE_TICK)
         local jsonStatus = json.encode(state)
         modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
     end
-
 end)
 
 while true do
