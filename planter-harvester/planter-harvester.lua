@@ -291,7 +291,7 @@ local function equipItemWithName(name)
     local debugString = (found==true) and string.format("Successfully selected item '%s' in inventory slot '%d'", name, slot) or string.format("Unable to select item '%s'", name)
     writeDebug(debugString)
 end
-local equipSeeds = function() equipItemWithName(SEED_NAME) end
+local equipSeeds = function() if not SEED_NAME then return end equipItemWithName(SEED_NAME) end
 
 local function harvestAndPlant()
 

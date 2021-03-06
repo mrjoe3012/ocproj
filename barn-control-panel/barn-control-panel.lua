@@ -12,6 +12,12 @@ gui.init()
 local FPS = 20
 local PORT = 1
 
+local MAX_STATUS_LENGTH = 20
+
+local truncateStatus(statusString)
+    return string.sub(statusString, 1, 17).."..."
+end
+
 local layout_botOverview = {
     columns = Label.new(4, 3, 0, 0xFFFFFF, "Name          Status               Progress              Charge", 1, true),
     Elmer_nameLabel = Label.new(4, 5, 0, 0xFFFFFF, "Elmer", 1, true),
@@ -26,6 +32,7 @@ local layout_botOverview = {
 
 local function onModemMessage(eventName, localAddress, remoteAddress, port, distance, msg)
     local stateTable = json.decode(msg)
+    if stateTable.status and #stateTable.status > MAX_STATUS_LENGTH then stateTable.status = truncateStatus(stateTable.status) end
     layout_botOverview[stateTable.name.."_statusLabel"].text = stateTable.status or ""
     layout_botOverview[stateTable.name.."_progressBar"].progress = stateTable.progress or 0
     layout_botOverview[stateTable.name.."_chargeBar"].progress = stateTable.charge or 0
