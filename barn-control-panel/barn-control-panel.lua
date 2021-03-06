@@ -28,6 +28,10 @@ local layout_botOverview = {
     ["Carrot-chan_statusLabel"] = Label.new(18,7,0,0xFFFFFF,"NONE", 1, true),
     ["Carrot-chan_progressBar"] = ProgressBar.new(39,7,18,1,0x00FF00, 0, 1, true),
     ["Carrot-chan_chargeBar"] = ProgressBar.new(61, 7, 18, 1, 0x00FF00, 0, 1, true),
+    ["Turnip-chan_nameLabel"] = Label.new(4, 9, 0, 0xFFFFFF, "Turnip-chan", 1, true),
+    ["Turnip-chan_statusLabel"] = Label.new(18,9,0,0xFFFFFF,"NONE", 1, true),
+    ["Turnip-chan_progressBar"] = ProgressBar.new(39,9,18,1,0x00FF00, 0, 1, true),
+    ["Turnip-chan_chargeBar"] = ProgressBar.new(61, 9, 18, 1, 0x00FF00, 0, 1, true),
 }
 
 local function onModemMessage(eventName, localAddress, remoteAddress, port, distance, msg)
