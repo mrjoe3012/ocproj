@@ -11,7 +11,7 @@ local function _draw(self)
 end
 
 function Label.new(x,y,backgroundColour,textColour,text,layer,enabled)
-    local instance GUIObject.new(x,y,layer,enabled)
+    local instance = GUIObject.new(x,y,layer,enabled)
     instance.draw = _draw
     instance.backgroundColour = backgroundColour or 0
     instance.textColour = textColour or 0xFFFFFF
