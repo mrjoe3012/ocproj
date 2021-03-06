@@ -20,10 +20,10 @@ end
 
 local layout_botOverview = {
     columns = Label.new(4, 3, 0, 0xFFFFFF, "Name          Status               Progress              Charge", 1, true),
-    Elmer_nameLabel = Label.new(4, 5, 0, 0xFFFFFF, "Elmer", 1, true),
-    Elmer_statusLabel = Label.new(18,5,0,0xFFFFFF,"NONE", 1, true),
-    Elmer_progressBar = ProgressBar.new(39,5,18,1,0x00FF00, 0, 1, true),
-    Elmer_chargeBar = ProgressBar.new(61, 5, 18, 1, 0x00FF00, 0, 1, true),
+    ["Wheat_nameLabel"] = Label.new(4, 5, 0, 0xFFFFFF, "Wheat-chan", 1, true),
+    ["Wheat-chan_statusLabel"] = Label.new(18,5,0,0xFFFFFF,"NONE", 1, true),
+    ["Wheat-chan_progressBar"] = ProgressBar.new(39,5,18,1,0x00FF00, 0, 1, true),
+    ["Wheat-chan_chargeBar"] = ProgressBar.new(61, 5, 18, 1, 0x00FF00, 0, 1, true),
     ["Carrot-chan_nameLabel"] = Label.new(4, 7, 0, 0xFFFFFF, "Carrot-chan", 1, true),
     ["Carrot-chan_statusLabel"] = Label.new(18,7,0,0xFFFFFF,"NONE", 1, true),
     ["Carrot-chan_progressBar"] = ProgressBar.new(39,7,18,1,0x00FF00, 0, 1, true),
@@ -32,6 +32,10 @@ local layout_botOverview = {
     ["Turnip-chan_statusLabel"] = Label.new(18,9,0,0xFFFFFF,"NONE", 1, true),
     ["Turnip-chan_progressBar"] = ProgressBar.new(39,9,18,1,0x00FF00, 0, 1, true),
     ["Turnip-chan_chargeBar"] = ProgressBar.new(61, 9, 18, 1, 0x00FF00, 0, 1, true),
+    ["Hemp-chan_nameLabel"] = Label.new(4, 11, 0, 0xFFFFFF, "Hemp-chan", 1, true),
+    ["Hemp-chan_statusLabel"] = Label.new(18,11,0,0xFFFFFF,"NONE", 1, true),
+    ["Hemp-chan_progressBar"] = ProgressBar.new(39,11,18,1,0x00FF00, 0, 1, true),
+    ["Hemp-chan_chargeBar"] = ProgressBar.new(61, 11, 18, 1, 0x00FF00, 0, 1, true),
 }
 
 local function onModemMessage(eventName, localAddress, remoteAddress, port, distance, msg)
