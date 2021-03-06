@@ -17,7 +17,11 @@ local layout_botOverview = {
     Elmer_nameLabel = Label.new(4, 5, 0, 0xFFFFFF, "Elmer", 1, true),
     Elmer_statusLabel = Label.new(18,5,0,0xFFFFFF,"GOING TO CHARGER", 1, true),
     Elmer_progressBar = ProgressBar.new(39,5,18,1,0x00FF00, 0, 1, true),
-    Elmer_chargeBar = ProgressBar.new(61, 5, 18, 1, 0x00FF00, 0, 1, true)
+    Elmer_chargeBar = ProgressBar.new(61, 5, 18, 1, 0x00FF00, 0, 1, true),
+    Carrot-chan_nameLabel = Label.new(4, 7, 0, 0xFFFFFF, "Carrot-chan", 1, true),
+    Carrot-chan_statusLabel = Label.new(18,7,0,0xFFFFFF,"NONE", 1, true),
+    Carrot-chan_progressBar = ProgressBar.new(39,7,18,1,0x00FF00, 0, 1, true),
+    Carrot-chan_chargeBar = ProgressBar.new(61, 7, 18, 1, 0x00FF00, 0, 1, true),
 }
 
 local function onModemMessage(eventName, localAddress, remoteAddress, port, distance, msg)
