@@ -433,6 +433,7 @@ end
 local statusThread = thread.create(function()
     while SERVER_ADDRESS and SERVER_PORT do
         os.sleep(STATE_UPDATE_TICK)
+        state.charge = (100/computer_api.maxEnergy())*(computer_api.energy())
         local jsonStatus = json.encode(state)
         modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
     end
