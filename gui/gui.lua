@@ -35,7 +35,7 @@ local function onDrag(eventName, screenAddress, x, y, button, player)
             end
         end
     else
-        if(GUIObject.objects[i].onMouseDrag) then pcall(GUIObject.objects[i].onMouseDrag, GUIObject.objects[i], x, y, button) end
+        if(dragOwner.onMouseDrag) then pcall(dragOwner.onMouseDrag, dragOwner, x, y, button) end
     end 
 end
 
