@@ -11,12 +11,6 @@ local position = {x=0,y=0,z=0}
 
 local state = {name=robot.name()}
 
-local function sendState()
-    state.charge = (100/computer_api.maxEnergy())*(computer_api.energy())
-    local jsonStatus = json.encode(state)
-    modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
-end
-
 function position.__tostring(self)
     return string.format("{%d,%d,%d}", self.x, self.y, self.z)
 end
@@ -41,6 +35,12 @@ local SERVER_ADDRESS, SERVER_PORT = config.SERVER_ADDRESS, config.SERVER_PORT
 local SEED_NAME = config.SEED_NAME
 local CROP_WAIT_TIME = config.CROP_WAIT_TIME
 local FARM_WIDTH, FARM_DEPTH = config.FARM_WIDTH, config.FARM_DEPTH
+
+local function sendState()
+    state.charge = (100/computer_api.maxEnergy())*(computer_api.energy())
+    local jsonStatus = json.encode(state)
+    modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
+end
 
 local debugFile = nil
 
@@ -332,6 +332,7 @@ local function harvestAndPlant()
             end
             counter = counter + 1
             state.progress = (100/(FARM_WIDTH*FARM_DEPTH))*counter
+            if state.progress > 100 then state.progress = 100 end
             sendState()
         end
         writeDebug(string.format("Finishing column %d. Respositioning.", i))
