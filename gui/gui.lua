@@ -31,9 +31,8 @@ local function onDrag(eventName, screenAddress, x, y, button, player)
     end
 end
 
-local eventListeners = {}
-
 function gui.init()
+    GUIObject.objects = {}
     event.listen("drop", onRelease)
     event.listen("touch", onTouch)
     event.listen("drag", onDrag)
