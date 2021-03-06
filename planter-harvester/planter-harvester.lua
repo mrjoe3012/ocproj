@@ -176,7 +176,7 @@ local function readWaypointFile(filename)
     assert(type(filename)=="string", string.format("Invalid argument #1. string expected got %s", type(filename)))
 
     local file = io.open(filename,"r")
-    assert(file, "Unable to read waypoints from '%s'", filename)
+    assert(file, string.format("Unable to read waypoints from '%s'", filename))
     local waypointDataRaw = file:read("*all")
     file:close()
 
@@ -298,7 +298,8 @@ local function getTotalItemsInInventory()
     local count = 0
 
     for i=1,inventorySize,1 do
-        count = count + inventoryController.getStackInInternalSlot(i).size
+        local stack = inventoryController.getStackInInternalSlot(i) or {size=0}
+        count = count + stack.size
     end
 
     return count
