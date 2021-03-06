@@ -4,8 +4,7 @@ local utils = require("utils")
 local graphics = require("graphics")
 local GUIObject = require("GUIObject")
 
-local function onTouch(...)--screenAddress, x, y, button, player)
-    args = {...}
+local function onTouch(eventName, screenAddress, x, y, button, player)
     for k,v in next,args do io.write(tostring(v).."\n") end
     io.flush()
     for i=#GUIObject.objects,1,-1 do
