@@ -34,6 +34,7 @@ facing.x, facing.z = config.START_FACING.x, config.START_FACING.z
 local SERVER_ADDRESS, SERVER_PORT = config.SERVER_ADDRESS, config.SERVER_PORT
 local SEED_NAME = config.SEED_NAME
 local CROP_WAIT_TIME = config.CROP_WAIT_TIME
+local FARM_WIDTH, FARM_DEPTH = config.FARM_WIDTH, config.FARM_DEPTH
 
 local debugFile = nil
 
