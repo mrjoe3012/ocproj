@@ -14,7 +14,7 @@ local function onTouch(screenAddress, x, y, button, player)
 end
 
 function gui.init()
-    GUIObject.objects = nil
+    GUIObject.objects = {}
     event.listen("drop", onTouch)
 end
 
