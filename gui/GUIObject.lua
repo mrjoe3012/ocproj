@@ -14,7 +14,7 @@ function GUIObject.new(x, y, layer, enabled)
     instance.layer = layer or 0
     instance.x, instance.y = x or 0, y or 0
     instance.enabled = enabled or true
-    instance.onClick = nil
+    instance.onMouseButtonDown, instance.onMouseButtonUp, instance.onMouseDrag = nil, nil, nil
 
     table.insert(GUIObject.objects, instance)
 
