@@ -21,7 +21,7 @@ end
 local layout_botOverview = {
     columns = Label.new(4, 3, 0, 0xFFFFFF, "Name          Status               Progress              Charge", 1, true),
     Elmer_nameLabel = Label.new(4, 5, 0, 0xFFFFFF, "Elmer", 1, true),
-    Elmer_statusLabel = Label.new(18,5,0,0xFFFFFF,"GOING TO CHARGER", 1, true),
+    Elmer_statusLabel = Label.new(18,5,0,0xFFFFFF,"NONE", 1, true),
     Elmer_progressBar = ProgressBar.new(39,5,18,1,0x00FF00, 0, 1, true),
     Elmer_chargeBar = ProgressBar.new(61, 5, 18, 1, 0x00FF00, 0, 1, true),
     ["Carrot-chan_nameLabel"] = Label.new(4, 7, 0, 0xFFFFFF, "Carrot-chan", 1, true),
