@@ -1,4 +1,4 @@
-local GUIObject = requre("GUIObject")
+local GUIObject = require("GUIObject")
 local utils = require("utils")
 local graphics = require("graphics")
 local Label = {}
