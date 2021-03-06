@@ -8,6 +8,7 @@ end
 
 function ProgressBar.new(x,y,width,height,fillColour,progress,layer,enabled)
     local instance = GUIObject.new(x,y,layer,enabled)
+    instance.draw = _draw
     instance.width = width
     instance.height = height
     instance.progress = progress or 100
