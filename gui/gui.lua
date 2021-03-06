@@ -4,7 +4,10 @@ local utils = require("utils")
 local graphics = require("graphics")
 local GUIObject = require("GUIObject")
 
-local function onTouch(screenAddress, x, y, button, player)
+local function onTouch(...)--screenAddress, x, y, button, player)
+    args = {...}
+    for k,v in next,args do io.write(tostring(v).."\n") end
+    io.flush()
     for i=#GUIObject.objects,1,-1 do
         if GUIObject.objects[i].pointCast(x,y) then
             if(GUIObject.objects[i].onClick) then pcall(GUIObject.objects[i].onClick, x, y, button) end
