@@ -5,8 +5,8 @@ local Panel = {}
 local function _draw(self)
     graphics.fillRectangle(self.x, self.y, self.width, self.height, self.colour)
     graphics.fillRectangle(self.x, self.y, self.width, self.border.thickness, self.border.colour)
-    graphics.fillRectangle(self.x, self.y, self.border.thickness, self.height, self.border.colour)
-    graphics.fillRectangle(self.x+self.width-self.border.thickness, self.y, self.border.thickness, self.height, self.border.colour)
+    graphics.fillRectangle(self.x, self.y, 2*self.border.thickness, self.height, self.border.colour)
+    graphics.fillRectangle(self.x+self.width-2*self.border.thickness, self.y, 2*self.border.thickness, self.height, self.border.colour)
     graphics.fillRectangle(self.x,self.y+self.height-self.border.thickness,self.width,self.border.thickness,self.border.colour)
 end
 

@@ -48,7 +48,7 @@ end
 
 function gui.render()
     -- highest layer first, so that lower layers overwrite the previous layer.
-    utils.bubbleSort(GUIObject.objects, function(a,b) return a.layer >= b.layer end)
+    utils.bubbleSort(GUIObject.objects, function(a,b) return a.layer <= b.layer end)
 
     graphics.clear()
 
