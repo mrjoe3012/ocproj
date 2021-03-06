@@ -14,7 +14,7 @@ local PORT = 1
 
 local MAX_STATUS_LENGTH = 20
 
-local truncateStatus(statusString)
+local function truncateStatus(statusString)
     return string.sub(statusString, 1, 17).."..."
 end
 
