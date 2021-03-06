@@ -45,7 +45,7 @@ function gui.render()
     graphics.clear()
 
     for i,object in ipairs(GUIObject.objects) do
-        object:draw()
+        if object.enabled then object:draw() end
     end
 end
 

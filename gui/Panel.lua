@@ -7,7 +7,7 @@ local function _draw(self)
 end
 
 local function _pointCast(self, x, y)
-    return (x>=self.x and x<=self.x+width) and (y>=self.y and y<=self.y+height)
+    return (x>=self.x and x<=self.x+self.width) and (y>=self.y and y<=self.y+self.height)
 end
 
 function Panel.new(x,y,width,height,colour,layer,enabled)
