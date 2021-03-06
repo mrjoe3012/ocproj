@@ -4,7 +4,7 @@ local graphics = require("graphics")
 local Label = {}
 
 local function _draw(self)
-    local lines = utils.stringsplit(self.text, "\n")
+    local lines = utils.stringSplit(self.text, "\n")
     for i,line in ipairs(lines) do
         graphics.write(self.x, self.y+(i-1), self.textColour, self.backgroundColour, line)
     end
