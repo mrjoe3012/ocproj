@@ -4,7 +4,10 @@ local utils = require("utils")
 local graphics = require("graphics")
 local GUIObject = require("GUIObject")
 
+local dragOwner = nil
+
 local function onRelease(eventName, screenAddress, x, y, button, player)
+    dragOwner = nil
     for i=#GUIObject.objects,1,-1 do
         if GUIObject.objects[i]:pointCast(x,y) then
             if(GUIObject.objects[i].onMouseButtonUp) then pcall(GUIObject.objects[i].onMouseButtonUp, GUIObject.objects[i], x, y, button) end
@@ -23,12 +26,17 @@ local function onTouch(eventName, screenAddress, x, y, button, player)
 end
 
 local function onDrag(eventName, screenAddress, x, y, button, player)
-    for i=#GUIObject.objects,1,-1 do
-        if GUIObject.objects[i]:pointCast(x,y) then
-            if(GUIObject.objects[i].onMouseDrag) then pcall(GUIObject.objects[i].onMouseDrag, GUIObject.objects[i], x, y, button) end
-            break
+    if dragOwner == nil then
+        for i=#GUIObject.objects,1,-1 do
+            if GUIObject.objects[i]:pointCast(x,y) then
+                dragOwner = GUIObject.objects[i]
+                if(GUIObject.objects[i].onMouseDrag) then pcall(GUIObject.objects[i].onMouseDrag, GUIObject.objects[i], x, y, button) end
+                break
+            end
         end
-    end
+    else
+        if(GUIObject.objects[i].onMouseDrag) then pcall(GUIObject.objects[i].onMouseDrag, GUIObject.objects[i], x, y, button) end
+    end 
 end
 
 function gui.init()
