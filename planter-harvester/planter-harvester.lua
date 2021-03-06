@@ -293,6 +293,18 @@ local function equipItemWithName(name)
 end
 local equipSeeds = function() if not SEED_NAME then return end equipItemWithName(SEED_NAME) end
 
+local function getTotalItemsInInventory()
+
+    local count = 0
+
+    for i=1,inventorySize,1 do
+        count = count + inventoryController.getStackInInternalSlot(i).size
+    end
+
+    return count
+
+end
+
 local function harvestAndPlant()
 
     writeDebug(string.format("Beginning to harvest and plant a farm of depth: %d and width: %d.", FARM_DEPTH, FARM_WIDTH))
@@ -396,15 +408,16 @@ local function chargeUpAndDeposit()
     writeDebug("Waiting for charge. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
 
     state.status = "CHARGING AND DEPOSITING"
+    state.progress = 0
     sendState()
-    local function inventoryEmpty()
-        for i=1,inventorySize,1 do
-            if robot.count(i) > 0 then return false end
-        end
-        return true
-    end
 
-    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) or not inventoryEmpty() do os.sleep(1) sendState() end
+    local startCount = getTotalItemsInInventory()
+
+    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) or getTotalItemsInInventory() > 0 do 
+        os.sleep(1)
+        state.progress = 100-((100/startCount)*getTotalItemsInInventory())
+        sendState()
+    end
 
     writeDebug("Finished charging. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
 end
