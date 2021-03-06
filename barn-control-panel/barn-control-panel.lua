@@ -22,7 +22,7 @@ local layout_botOverview = {
 
 local function onModemMessage(eventName, localAddress, remoteAddress, port, distance, msg)
     local stateTable = json.decode(msg)
-    layout_botOverview[stateTable.name.."_statusLabel"].text = stateTable.status
+    layout_botOverview[stateTable.name.."_statusLabel"].text = stateTable.status or ""
     layout_botOverview[stateTable.name.."_progressBar"].progress = stateTable.progress or 0
     layout_botOverview[stateTable.name.."_chargeBar"].progress = stateTable.charge or 0
 end

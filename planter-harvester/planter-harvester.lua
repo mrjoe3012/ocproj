@@ -11,6 +11,12 @@ local position = {x=0,y=0,z=0}
 
 local state = {name=robot.name()}
 
+local function sendState()
+    state.charge = (100/computer_api.maxEnergy())*(computer_api.energy())
+    local jsonStatus = json.encode(state)
+    modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
+end
+
 function position.__tostring(self)
     return string.format("{%d,%d,%d}", self.x, self.y, self.z)
 end
@@ -293,6 +299,7 @@ local function harvestAndPlant()
 
     state.status = "FARMING"
     state.progress = 0.0
+    sendState()
 
     local startPos = {x=position.x, z=position.z}
     local startFacing = {x=facing.x, z=facing.z}
@@ -325,6 +332,7 @@ local function harvestAndPlant()
             end
             counter = counter + 1
             state.progress = (100/(FARM_WIDTH*FARM_DEPTH))*counter
+            sendState()
         end
         writeDebug(string.format("Finishing column %d. Respositioning.", i))
         if i ~= FARM_WIDTH then
@@ -372,7 +380,7 @@ end
 local function goToChargerFromFarm()
 
     state.status = "GOING TO CHARGER"
-
+    sendState()
     writeDebug("Going to charger from farm.")
 
     doWaypoints(FARM_TO_CHARGER)
@@ -387,7 +395,7 @@ local function chargeUpAndDeposit()
     writeDebug("Waiting for charge. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
 
     state.status = "CHARGING AND DEPOSITING"
-
+    sendState()
     local function inventoryEmpty()
         for i=1,inventorySize,1 do
             if robot.count(i) > 0 then return false end
@@ -395,8 +403,7 @@ local function chargeUpAndDeposit()
         return true
     end
 
-    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) or not inventoryEmpty() do os.sleep(1) end
-    os.sleep(1)
+    while computer_api.energy() < (19/20)*(computer_api.maxEnergy()) or not inventoryEmpty() do os.sleep(1) sendState() end
 
     writeDebug("Finished charging. Energy: %d/%d", computer_api.energy(), computer_api.maxEnergy())
 end
@@ -404,7 +411,7 @@ end
 local function goToFarmFromCharger()
 
     state.status = "GOING TO FARM"
-
+    sendState()
     writeDebug("Going to farm from charger.")
 
     doWaypoints(FARM_TO_CHARGER, #FARM_TO_CHARGER, 1, -1)
@@ -417,28 +424,22 @@ local function waitForCrops()
 
     state.status = "WAITING FOR CROPS"
     state.progress = 0
+    sendState()
 
     local counter = 0
 
     while counter < CROP_WAIT_TIME do
-        os.sleep(1)
-        counter = counter + 1
+        os.sleep(15)
+        counter = counter + 15
         state.progress = (100/CROP_WAIT_TIME)*counter
+        if state.progress > 100 then state.progress = 100 end
+        sendState()
     end
 
     state.status = nil
     state.progress = nil
 
 end
-
-local statusThread = thread.create(function()
-    while SERVER_ADDRESS and SERVER_PORT do
-        os.sleep(STATE_UPDATE_TICK)
-        state.charge = (100/computer_api.maxEnergy())*(computer_api.energy())
-        local jsonStatus = json.encode(state)
-        modem.send(SERVER_ADDRESS,SERVER_PORT,json.encode(state))
-    end
-end)
 
 while true do
     harvestAndPlant()
